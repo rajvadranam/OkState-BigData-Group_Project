@@ -7,8 +7,8 @@ import scipy.spatial.distance as distance
 from DataHandler import DetailsBuilder
 import itertools
 
-
-
+#objective Find the occurances for given checklist per day basis
+#data set folder
 ResFolder = "C:\\Users\\Raj\\Desktop\\GroupProject_Data\\"
 myDict={};
 mymatrix={};
@@ -33,6 +33,7 @@ def Wordify(a):
 def NormalizeWord(f):
     return re.sub ( r"[^a-zA-Z-_(0-9) ]+", '', f ).strip()
 
+#main logic
 if __name__ == '__main__':
     myDict={}
     mydetails = DetailsBuilder().readfile(ResFolder+'nasa_access_logs.csv')
@@ -56,6 +57,7 @@ wordCounter = {}
 UserDetails={}
 count = 0
 
+#logic to filter for each day
 for key, value in  myDict.items ():
     alist = []
     tempb = list(filter(None, value['Folder'].split ( '~' )))
@@ -70,6 +72,7 @@ for key, value in  myDict.items ():
 
         UserDetails[key] = {'Frequency':WordFrequency,'CountList':alist}
 
+#logic to print per day
 for key1,value1 in UserDetails.items():
     tempaa =UserDetails[key1]['CountList']
     countForThiskey = Counter(list(tempaa))

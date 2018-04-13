@@ -7,9 +7,11 @@ import scipy.spatial.distance as distance
 from DataHandler import DetailsBuilder
 import itertools
 
+#objective is to know for the given checklist .to get patters matching to chicklist for each day in the preprocessed dataset(for faster processing)
 
-
+#Setting dataset folder (change this as needed)
 ResFolder = "C:\\Users\\Raj\\Desktop\\GroupProject_Data\\"
+#initializing Variables
 myDict={};
 mymatrix={};
 a = set();
@@ -32,8 +34,9 @@ def Wordify(a):
     return str_list
 def NormalizeWord(f):
     return re.sub ( r"[^a-zA-Z-_(0-9) ]+", '', f ).strip()
-
+#main Logic begins here
 if __name__ == '__main__':
+    #read the particular processed data csv
     mydetails = DetailsBuilder().readfile(ResFolder+'nasa_access_logs.csv')
     i=0;
     for line in mydetails:
@@ -74,25 +77,29 @@ wordCounter = {}
 UserDetails={}
 count = 0
 for key, value in  myDict.items ():
-
-    tempa = value['Date'].split('~')
+    #getting date for each user to reduce the logic on date basis
+    tempa = list(filter(None,value['Date'].split('~')))
     tempb = list(filter(lambda k: 'NA' not in k, value['Folder'].split ( '~' )))
     Checklist = ['resources', 'missions', 'technology', 'apollo', 'soils', 'imagemap']
     FullFolderList =[]
     MatchedFolder =[]
     for date,fullfolder in itertools.zip_longest(tempa,tempb):
         for item in Checklist:
-            if item in fullfolder:
-                if date in wordCounter.keys():
-                            wordCounter[date]['Rawpath'] += "~"+fullfolder
-                            wordCounter[date]['checklistItem'] += "~"+item
-                else:
-                            wordCounter[date]={'Rawpath':fullfolder,'checklistItem':item}
+            try:
+                if item in fullfolder and fullfolder != None:
+                    if date in wordCounter.keys():
+                        wordCounter[date]['Rawpath'] += "~"+fullfolder
+                        wordCounter[date]['checklistItem'] += "~"+item
+                    else:
+                        #getting the fullpath and matched checlist path fro the particular date
+                        wordCounter[date]={'Rawpath':fullfolder,'checklistItem':item}
+            except:
+                print()
     wordTempCounter = wordCounter.copy()
     UserDetails[key] =wordTempCounter
     wordTempCounter = {}
 for key1 in wordCounter.keys():
     tempmainfolder = wordCounter[key1]['Rawpath'].split('~')
     tempmatched =  wordCounter[key1]['checklistItem'].split('~')
-    print(len(tempmainfolder))
-    print ( len ( tempmatched ) )
+    print(tempmainfolder)
+    print ( tempmatched )
