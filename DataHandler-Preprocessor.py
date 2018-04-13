@@ -4,7 +4,8 @@ from os import listdir
 from os.path import isfile, join
 import numpy as np
 import itertools
-
+#logic to preprocess the raw dataset to a processed data set of user,timestamp and folder accessed
+#gives ot a csv on specified path as output.csv
 ResFolder = "C:\\Users\\Raj\\Desktop\\GroupProject_Data\\"
 onlyfiles = [f for f in listdir ( ResFolder ) if isfile ( join ( ResFolder, f ) )]
 from collections import defaultdict, namedtuple
